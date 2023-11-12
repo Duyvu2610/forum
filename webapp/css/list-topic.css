@@ -1,0 +1,45 @@
+@charset "ISO-8859-1";
+
+
+button{
+	margin-bottom: 20px;
+	
+	margin-left: 20px;
+}
+.title{
+	padding-left: 20px;
+	font-weight: 600;
+	font-size: large;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+
+}
+p{
+	margin:0;
+}
+th{
+	background-color: #dddddd;
+}
+
+tr:nth-child(odd) {
+  background-color: lightskyblue;
+}
+tr:nth-child(even) {
+  background-color: white;
+}
+th:nth-child(even), td:nth-child(even){
+	width: 10%;
+}
+td:nth-child(odd){
+	text-align: left;
+}
