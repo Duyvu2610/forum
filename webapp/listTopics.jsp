@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
-<head>
+<head> 
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="./css/list-topic.css">
 <link rel="stylesheet" type="text/css" href="./css/index.css">
