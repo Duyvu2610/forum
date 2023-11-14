@@ -49,4 +49,14 @@
     <servlet-name>NewTopicServlet</servlet-name>
     <url-pattern>/NewTopicServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ReplyTopicServlet</display-name>
+    <servlet-name>ReplyTopicServlet</servlet-name>
+    <servlet-class>servlet.ReplyTopicServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReplyTopicServlet</servlet-name>
+    <url-pattern>/ReplyTopicServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

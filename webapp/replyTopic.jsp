@@ -12,17 +12,20 @@
 </head>
 <body>
 	<div class="wrapper">
-	<c:set var="user" value="${sessionScope.user}" />
+		<c:set var="user" value="${sessionScope.user}" />
 		<div class="header">
 			<span>Chào ${user.username}| </span> <a href="logout">Thoát</a>
 		</div>
-		<form class="input" action="new-topic?type=submit" method="post">
-			<span>Tiêu đề</span> <input type="text" name="title"> <br>
-			<span>Nội dung</span>
+		<form class="input" action="reply?id=${requestScope.id}"
+			method="post">
+			<span>Tiêu đề</span> <input type="text" name="title"
+				value="Re: ${requestScope.title}"> <br> <span>Nội dung</span>
 			<textarea rows="4" cols="50" name="content"></textarea>
 			<div class="submit">
 				<button type="submit">gui</button>
-				<button><a href = "new-topic?type=cancel">hủy bỏ</a></button>
+				<button>
+					<a href="new-topic?type=cancel">hủy bỏ</a>
+				</button>
 			</div>
 		</form>
 	</div>

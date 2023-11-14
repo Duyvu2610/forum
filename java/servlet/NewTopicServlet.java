@@ -5,12 +5,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import model.Category;
 import model.Topic;
 import model.User;
@@ -35,14 +36,10 @@ public class NewTopicServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String queryString = request.getQueryString();
-		String[] keyValue = queryString.split("=");
-		System.out.println(queryString);
+		String type = request.getParameter("type");
 		// Tách giá trị số từ query string
-		if (keyValue[0].equals("type")) {
+		if (type != null) {
 			response.sendRedirect("topics");
-	    
 		}else {
 			request.getRequestDispatcher("newTopic.jsp").forward(request, response);
 		}
@@ -52,6 +49,7 @@ public class NewTopicServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		HttpSession sess = request.getSession();
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
@@ -67,7 +65,7 @@ public class NewTopicServlet extends HttpServlet {
 
         // Sử dụng Collections.max để lấy giá trị lớn nhất (ID cuối cùng)
         id = Collections.max(topicIds);
-        System.out.println(id);
+       
         User user = (User) sess.getAttribute("user");
 		Topic topic = new Topic(id + 1, title, content, user, new Category("Học hành"));
 		topics.put(id + 1, topic);

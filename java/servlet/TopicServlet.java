@@ -1,13 +1,15 @@
 package servlet;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import service.ForumService;
 
 import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.ForumService;
 
 /**
  * Servlet implementation class TopicServlet
@@ -28,11 +30,10 @@ public class TopicServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String queryString = request.getQueryString();
+		request.setCharacterEncoding("UTF-8");
+		String id = request.getParameter("id");
 		// Tách giá trị số từ query string
-		if (queryString != null && queryString.contains("id")) {
-	        String[] keyValue = queryString.split("=");
-	        String id = keyValue[1];
+		if (id != null) {
 			request.setAttribute("topic", ForumService.getInstance().findTopic(Integer.parseInt(id)));
 			request.getRequestDispatcher("showTopic.jsp").forward(request, response);
 		}else {

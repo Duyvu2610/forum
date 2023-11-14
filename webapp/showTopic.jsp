@@ -1,90 +1,74 @@
-<%@page import="java.util.EmptyStackException"%>
-<%@page import="java.util.Locale"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Collection"%>
-<%@page import="model.Message"%>
-<%@page import="model.Topic"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="./css/showTopic.css">
 <link rel="stylesheet" type="text/css" href="./css/index.css">
 </head>
 <body>
 	<div class="wrapper">
-		<%
-		Topic topic = (Topic) request.getAttribute("topic");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm a", Locale.US);
-		SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd-yyyy");
-		%>
+		<c:set var="topic" value="${requestScope.topic}" />
+		<c:set var="user" value="${sessionScope.user}" />
 		<div class="header">
-			<span>Chào chuotcon| </span> <a href="logout">Thoát</a>
+			<span>Chào ${user.username}| </span> <a href="logout">Thoát</a>
 		</div>
-		<p class="title">Chủ đề:&nbsp;<%=topic.getTitle()%></p>
-		<% 
-		
-				Entry e;
-				try {%>
-				<span>Bài mới nhất gửi <%=dateFormat.format(topic.getNewMessage().getCreatedTime().getTime())%>, do <span><%=topic.getNewMessage().getCreator().getUsername()%></span> gửi. <span><%=topic.getMessages().size() %> hồi âm</span></span>
-				<% 
-					
-				} catch (EmptyStackException f) {
-					
-				
-			%>
-		
+		<p class="title">Chủ đề:&nbsp;${topic.title}</p>
+		<c:catch var="emptyStackException">
+            
+			<c:choose>
+				<c:when test="${not empty topic.newMessage}">
+					<span>Bài mới nhất gửi <fmt:formatDate type="date" value="${topic.newMessage.createdTime.time}" pattern="MM/dd/yyyy hh:mm a" />, do <b>${topic.newMessage.creator.username}</b> gửi. <span>${fn:length(topic.messages)} hồi âm</span></span>
+				</c:when>
+				<c:otherwise>
+					<span>Bài mới nhất gửi <fmt:formatDate type="date" value="${topic.createdTime.time}" pattern="MM/dd/yyyy hh:mm a" />, do <b>${topic.creator.username}</b> gửi. <span>${fn:length(topic.messages)} hồi âm</span></span>
+				</c:otherwise>
+			</c:choose>
+
+		</c:catch>
+
 
 		<div class="table">
-			<div class="time"><%=dateFormat.format(topic.getCreatedTime().getTime())%></div>
-			<div class="group">
-				<div class="user">
-					<span><%=topic.getCreator().getUsername()%></span>
-					<p>
-						Tham gia
-						<%=dateFormat2.format(topic.getCreatedTime().getTime())%></p>
-				</div>
-				<div class="content">
-					<div class="content-title">
-						<span><%=topic.getTitle()%></span> <a href="#">Trả lời</a>
-					</div>
-					<div class="content-detail"><%=topic.getContent()%></div>
-				</div>
-			</div>
+            <div class="time"><fmt:formatDate type="both" value="${topic.createdTime.time}" pattern="MM-dd-yyyy hh:mm a" /></div>
+            <div class="group">
+                <div class="user">
+                    <b>${topic.creator.username}</b>
+                    <p>Tham gia <fmt:formatDate type="date" value="${topic.createdTime.time}" pattern="MM-dd-yyyy" /></p>
+                </div>
+                <div class="content">
+                    <div class="content-title">
+                        <span>${topic.title}</span> <a href="reply?id=${topic.id}">Trả lời</a>
+                    </div>
+                    <div class="content-detail">${topic.content}</div>
+                </div>
+            </div>
+        </div>
+        <c:forEach var="mess" items="${topic.messages}">
+            <div class="table">
+                <div class="time"><fmt:formatDate type="both" value="${mess.createdTime.time}" pattern="MM-dd-yyyy hh:mm a" /></div>
+                <div class="group">
+                    <div class="user">
+                        <b>${mess.creator.username}</b>
+                        <p>Tham gia <fmt:formatDate type="date" value="${mess.createdTime.time}" pattern="MM-dd-yyyy" /></p>
+                    </div>
+                    <div class="content">
+                        <div class="content-title">
+                            <span>${mess.title}</span> <a href="reply?id=${topic.id}">Trả lời</a>
+                        </div>
+                        <div class="content-detail">${mess.content}</div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>		
+		<div class="list">
+			<a href="topics">Danh sách chủ đề</a>
 		</div>
-		<%
-		try {
-			for (Message mess : topic.getMessages()) {
-		%>
-		<div class="table">
-			<div class="time"><%=dateFormat.format(mess.getCreatedTime().getTime())%></div>
-			<div class="group">
-				<div class="user">
-					<span><%=mess.getCreator().getUsername()%></span>
-					<p>
-						Tham gia
-						<%=dateFormat2.format(mess.getCreatedTime().getTime())%></p>
-				</div>
-				<div class="content">
-					<div class="content-title">
-						<span><%=mess.getTitle()%></span> <a href="#">Trả lời</a>
-					</div>
-					<div class="content-detail"><%=mess.getContent()%></div>
-				</div>
-			</div>
-		</div>
-		<%
-		}
-		%>
-		<%
-		} catch (EmptyStackException f) {
-
-		}
-		%>
-		<div  class = "list"><a href = "topics">Danh sách chủ đề</a></div>
 
 	</div>
 </body>
